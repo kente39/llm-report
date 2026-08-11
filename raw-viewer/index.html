@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>원문 뷰어 — v1/v2/v3 · 전체 세션</title>
+
+  <!-- 공용 스타일 (../shared) — 3개 보고서가 같은 파일을 참조 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/css/base.css">
+  <link rel="stylesheet" href="../shared/css/nav.css">
+  <link rel="stylesheet" href="../shared/css/chat.css">
+  <link rel="stylesheet" href="../shared/css/lightbox.css">
+</head>
+<body>
+
+  <!-- 홈 버튼: 현재 섹션의 첫 서브페이지로 복귀 (클릭영역보다 위 z-index) -->
+  <button id="home-btn" class="home-btn" type="button" aria-label="현재 섹션 처음으로">HOME</button>
+  <a href="../index.html" class="to-list-btn" aria-label="보고서 목록으로">← 목록</a>
+
+  <!-- 페이지 표시 영역: 한 화면에 한 페이지 -->
+  <main class="stage">
+    <section id="page" class="page"></section>
+  </main>
+
+  <!-- 클릭 이동 영역 (좌우 = 섹션 / 상하 = 서브페이지) -->
+  <div class="hitzone hitzone--left"  data-dir="prevSection" aria-hidden="true"></div>
+  <div class="hitzone hitzone--right" data-dir="nextSection" aria-hidden="true"></div>
+  <div class="hitzone hitzone--up"    data-dir="prevSub"     aria-hidden="true"></div>
+  <div class="hitzone hitzone--down"  data-dir="nextSub"     aria-hidden="true"></div>
+
+  <!-- 현재 위치 표시기 -->
+  <div id="indicator" class="indicator">– / –  ·  – / –</div>
+
+  <!-- ===================================================================
+       스크립트 로드 순서 (이 순서를 반드시 지킬 것)
+       1) data/    : 이 보고서 전용 — SECTIONS_DATA 에 순서대로 push
+       2) nav.js   : 공용 네비게이션 로직 (정의만)
+       3) main.js  : 공용 초기화 — 데이터 로드 완료 후 실행
+       =================================================================== -->
+
+  <!-- 1) 데이터 (원문 뷰어) -->
+  <script src="data/01_gpt54.js"></script>
+  <script src="data/02_gemini31.js"></script>
+  <script src="data/03_claude48.js"></script>
+  <script src="data/04_full_session.js"></script>
+
+  <!-- 2) 공용 네비게이션 로직 -->
+  <script src="../shared/js/nav.js"></script>
+
+  <!-- 3) 공용 렌더링 (블록 → 화면) -->
+  <script src="../shared/js/render.js"></script>
+  <script src="../shared/js/overview.js"></script>
+  <script src="../shared/js/chat.js"></script>
+  <script src="../shared/js/lightbox.js"></script>
+
+  <!-- 4) 공용 앱 초기화 -->
+  <script src="../shared/js/main.js"></script>
+
+</body>
+</html>

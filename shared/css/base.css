@@ -1,0 +1,446 @@
+/* =========================================================
+   base.css — 리셋 / 타이포그래피 / 페이지 레이아웃
+   ========================================================= */
+
+:root {
+  /* 색상 토큰 */
+  --bg:        #14161a;
+  --fg:        #f2f4f7;
+  --fg-dim:    #8b939f;
+  --line:      #2a2e35;
+  --accent:    #6ea8fe;
+
+  /* 타이포 스케일 — 반응형(clamp)
+     clamp(최소, 유동, 최대): 좁은 화면에선 최소, 넓으면 최대까지.
+     데스크톱 최대값 = 기존 요구사항(48/32/24/20). 모바일에선 자동 축소.
+     크기 조정은 여기 4줄만 바꾸면 전체 제목에 반영된다. (개별 예외 금지) */
+  --fs-h1: clamp(30px, 6vw, 48px);
+  --fs-h2: clamp(24px, 4.2vw, 32px);
+  --fs-h3: clamp(20px, 3vw, 24px);
+  --fs-p:  clamp(16px, 2.4vw, 20px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  /* 스크롤 없이 한 화면 고정 */
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  /* 본문 폰트: Noto Sans (한/영). 웹폰트는 index.html <head> 에서 로드.
+     로드 실패 시 시스템 한글 폰트로 대체된다. */
+  font-family: "Noto Sans KR", "Noto Sans",
+               "Apple SD Gothic Neo", "Malgun Gothic",
+               system-ui, -apple-system, sans-serif;
+  font-size: var(--fs-p);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* 모바일 스와이프 시 브라우저 기본 제스처 차단 */
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+p  { font-size: var(--fs-p);  }
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------
+   stage / page — 한 화면에 한 페이지만 표시 (풀스크린)
+   --------------------------------------------------------- */
+
+.stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  /* 모바일 주소창 대응 (미지원 브라우저는 위 100vh 사용) */
+  height: 100dvh;
+}
+
+.page {
+  width: 100%;
+  height: 100%;
+  /* 콘텐츠를 세로 중앙 정렬하되, 넘치면 스크롤 (한 페이지 = 한 화면 원칙 유지) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  padding: 8vh 6vw;
+  gap: 20px;
+  position: relative; /* page-finale 빛 효과의 기준점 */
+}
+
+/* 페이지 전환 효과 — .page-anim 이 붙을 때만 재생 (main.js 가 토글).
+   중요: .page 자체는 항상 opacity:1 (기본 보임). 애니메이션은 '나타나는 연출'만
+   담당하므로, JS 가 클래스를 못 붙여도 페이지는 정상 표시된다. */
+.page-anim {
+  animation: page-enter .34s ease;
+}
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* 마지막 페이지 — 은은한 빛이 한 번 번지는 효과 (무한 반복 아님).
+   z-index:-1 로 콘텐츠 뒤에 깔려 클릭·표시를 방해하지 않는다. */
+.page-finale::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 40%,
+              rgba(110, 168, 254, 0.14), transparent 60%);
+  animation: finale-glow 2.4s ease-out;
+}
+@keyframes finale-glow {
+  0%   { opacity: 0; }
+  30%  { opacity: 1; }
+  100% { opacity: 0.35; }
+}
+
+/* 실제 콘텐츠가 있는 페이지는 위에서부터 읽도록 중앙정렬 해제 */
+.page.has-content {
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+/* 콘텐츠가 적은 페이지: 블록들을 하나의 카드로 묶되 위쪽 정렬.
+   위아래로 텅 비는 대신 카드가 화면 상단에서부터 자연스럽게 시작한다. */
+.page.sparse {
+  justify-content: flex-start;
+  align-items: center;
+}
+.sparse-card {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 36px 40px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #1b1e24;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sparse-card > .block { max-width: none; }
+
+/* 콘텐츠 최대 폭 (가독성) */
+.page > .block {
+  width: 100%;
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 빈 페이지 위치 라벨 (STEP 1 잔재 / 미작성 페이지) */
+.page-label {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-dim);
+}
+
+/* ---------------------------------------------------------
+   블록 공통 (render.js 가 생성)
+   --------------------------------------------------------- */
+
+.block--title {
+  text-align: center;
+  margin: auto 0;
+}
+.title-main { font-size: var(--fs-h1); font-weight: 800; letter-spacing: -0.03em; }
+.title-sub  { font-size: var(--fs-h3); color: var(--fg-dim); margin-top: 12px; }
+
+.block--text h1 { font-size: var(--fs-h1); font-weight: 800; }
+.block--text h2 { font-size: var(--fs-h2); font-weight: 700; }
+.block--text h3 { font-size: var(--fs-h3); font-weight: 700; }
+.block--text h4 { font-size: 21px; font-weight: 700; margin-top: 8px; }
+.block--text h5 { font-size: 18px; font-weight: 600; color: var(--fg-dim); }
+.block--text.block--text { line-height: 1.7; }
+.block--list {
+  padding-left: 22px;
+  line-height: 1.9;
+}
+.block--list li { margin: 4px 0; }
+.block--text strong { color: var(--fg); font-weight: 700; }
+.block--text code,
+.block--code code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+.block--text code {
+  background: var(--line);
+  padding: 2px 6px; border-radius: 4px;
+  font-size: 0.88em;
+}
+.block--text a, .chat-more { color: var(--accent); }
+
+/* 이미지 */
+.block--image { margin: 0; text-align: center; }
+.block--image img {
+  max-width: 100%; height: auto;
+  border: 1px solid var(--line); border-radius: 8px;
+}
+.block--image img.zoomable { cursor: zoom-in; }
+.block--image figcaption {
+  color: var(--fg-dim); font-size: 15px; margin-top: 10px;
+}
+
+/* 표 */
+.block--table {
+  width: 100%; border-collapse: collapse;
+  font-size: 17px;
+}
+.block--table th, .block--table td {
+  border: 1px solid var(--line);
+  padding: 10px 14px; text-align: left;
+}
+.block--table th {
+  background: #1b1e24; font-weight: 700;
+}
+/* 셀 강조 — 문단 스타일 방해하지 않는 옅은 배경 (요청사항) */
+.block--table td.mark-good { background: rgba(80, 200, 120, 0.12); }
+.block--table td.mark-bad  { background: rgba(240, 100, 100, 0.12); }
+
+/* 코드 */
+.block--code {
+  background: #0f1115; border: 1px solid var(--line); border-radius: 8px;
+  padding: 16px 18px; overflow-x: auto;
+  font-size: 15px; line-height: 1.5;
+}
+.block--code code { color: #d6deeb; white-space: pre; }
+
+/* 라벨 뱃지 (페이지 상단) */
+.block--label {
+  align-self: flex-start;
+  display: inline-block;
+  padding: 5px 12px; border-radius: 6px;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+}
+.label-blue  { background: rgba(110,168,254,0.18); color: #9cc2ff; }
+.label-green { background: rgba(80,200,120,0.18);  color: #7fdca0; }
+.label-red   { background: rgba(240,100,100,0.18); color: #ff9d9d; }
+.label-gray  { background: var(--line);            color: var(--fg-dim); }
+
+/* nav — 서브페이지 바로가기 탭 (첫 페이지) */
+.block--nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  /* 좌우 클릭영역(z-index:10)보다 위로 올려 클릭이 탭에 닿게 한다 */
+  position: relative;
+  z-index: 15;
+}
+
+/* hub — 모델 선택 허브 (카드 = 이미지 + 라벨) */
+.block--hub {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* 좌우 클릭영역 위로 (클릭 겹침 방지) */
+  position: relative;
+  z-index: 15;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.hub-card {
+  flex: 1 1 220px;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #1b1e24;
+  color: var(--fg);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color .15s ease, transform .15s ease;
+}
+.hub-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+.hub-thumb {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #0f1115;
+}
+.hub-thumb--ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg-dim);
+  font-size: 15px;
+  border: 1px dashed var(--line);
+}
+.hub-label {
+  font-size: 17px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* 이미지 placeholder (준비 전) */
+.image-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--fg-dim);
+  font-size: 15px;
+}
+.nav-tab {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--fg-dim);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color .15s ease, border-color .15s ease, background .15s ease;
+}
+.nav-tab:hover {
+  color: var(--fg);
+  border-color: var(--fg-dim);
+}
+.nav-tab.current {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0c1220;
+}
+
+/* ---------------------------------------------------------
+   접근성/성능 — 모션 최소화 설정 시 모든 페이지 애니메이션 비활성
+   --------------------------------------------------------- */
+/* 동작 최소화 설정: 애니메이션을 끄지 않고 '순하게'만.
+   위로 슬라이드(transform)는 빼고, 은은한 페이드만 짧게 남긴다.
+   빛 번짐도 확 번지지 않고 잔잔한 밝기로만. */
+@media (prefers-reduced-motion: reduce) {
+  .page-anim { animation: page-enter-soft .25s ease; }
+  .page-finale::before { animation: finale-glow-soft 1.2s ease-out; }
+  .hub-card, .nav-tab { transition: color .15s ease; }
+}
+@keyframes page-enter-soft {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
+}
+@keyframes finale-glow-soft {
+  from { opacity: 0; }
+  to   { opacity: 0.3; }
+}
+
+/* ---------------------------------------------------------
+   overview — 전체 구조 격자 맵 (ESC)
+   가로: 섹션(열) / 세로: 서브페이지(행)
+   --------------------------------------------------------- */
+.ov-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(8, 10, 13, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 4vw;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.ov-overlay.ov-open { opacity: 1; }
+
+.ov-panel {
+  max-width: 96vw;
+  max-height: 92vh;
+  overflow: auto;
+  background: #16191e;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 28px 32px;
+  transform: translateY(8px);
+  transition: transform .2s ease;
+}
+.ov-open .ov-panel { transform: none; }
+
+.ov-title { font-size: 22px; font-weight: 800; color: var(--fg); }
+.ov-hint  { font-size: 13px; color: var(--fg-dim); margin: 6px 0 20px; }
+
+/* 격자: 섹션 = 가로로 나열되는 열 */
+.ov-grid {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.ov-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 130px;
+}
+.ov-col-head {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 4px 2px 6px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+/* 서브페이지 칸: 위→아래 */
+.ov-cell {
+  text-align: left;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #1b1e24;
+  color: var(--fg-dim);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, transform .15s ease;
+}
+.ov-cell:hover {
+  color: var(--fg);
+  border-color: var(--fg-dim);
+  transform: translateX(2px);
+}
+.ov-cell.ov-current {
+  border-color: var(--accent);
+  color: var(--fg);
+  background: rgba(110, 168, 254, 0.14);
+}
+.ov-cell-label { display: block; }
+
+/* 모바일: 격자를 가로 스크롤 */
+@media (max-width: 600px) {
+  .ov-panel { padding: 20px; }
+  .ov-grid { overflow-x: auto; }
+  .ov-col { min-width: 120px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ov-overlay, .ov-panel, .ov-cell { transition: none; }
+}

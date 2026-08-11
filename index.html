@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLM 프롬프트 엔지니어링 — 노트북 가격 분석 과업</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #14161a; --fg: #f2f4f7; --fg-dim: #8b939f;
+      --line: #2a2e35; --accent: #6ea8fe;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      background: var(--bg); color: var(--fg);
+      font-family: "Noto Sans KR", system-ui, sans-serif;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 6vh 6vw; line-height: 1.6;
+    }
+    .wrap { max-width: 760px; width: 100%; }
+    h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 800; margin: 0 0 8px; }
+    .sub { color: var(--fg-dim); font-size: clamp(15px, 2.5vw, 18px); margin-bottom: 40px; }
+    .cards { display: flex; flex-direction: column; gap: 14px; }
+    a.card {
+      display: block; padding: 22px 26px; border: 1px solid var(--line);
+      border-radius: 14px; background: #1b1e24; color: var(--fg);
+      text-decoration: none; transition: border-color .15s ease, transform .15s ease;
+    }
+    a.card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .card .n { color: var(--accent); font-weight: 800; font-size: 14px; }
+    .card .t { font-size: 20px; font-weight: 700; margin: 4px 0; }
+    .card .d { color: var(--fg-dim); font-size: 15px; }
+    .foot { margin-top: 32px; color: var(--fg-dim); font-size: 13px; }
+    .foot a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>LLM 프롬프트 엔지니어링</h1>
+    <p class="sub">2024 노트북 가격 결정 요인 분석 — GPT-5.4 · Gemini 3.1 Pro · Claude Opus 4.8 비교</p>
+
+    <div class="cards">
+      <a class="card" href="1-comparison/index.html">
+        <div class="n">01</div>
+        <div class="t">모델 비교 · 선정 보고서</div>
+        <div class="d">3종 LLM을 동일 과업에 투입, 5축 평가로 최적 모델 선정</div>
+      </a>
+      <a class="card" href="2-design/index.html">
+        <div class="n">02</div>
+        <div class="t">시스템 설계 문서</div>
+        <div class="d">페르소나 · 프롬프트 · Few-shot · 검증 전략 · v1→v2→v3 개선 이력</div>
+      </a>
+      <a class="card" href="3-log/index.html">
+        <div class="n">03</div>
+        <div class="t">실행 로그</div>
+        <div class="d">10턴+ 대화, 문맥 유지 · 환각 방지 검증, 기술적 통찰</div>
+      </a>
+      <a class="card" href="raw-viewer/index.html">
+        <div class="n">＋</div>
+        <div class="t">원문 뷰어 <span style="color:var(--fg-dim);font-weight:400;font-size:14px">(참고용)</span></div>
+        <div class="d">v1/v2/v3 원문과 전체 세션을 대화 형태로 열람</div>
+      </a>
+    </div>
+
+    <p class="foot">
+      키보드: ← → 섹션 이동 · ↑ ↓ 서브페이지 · ESC 전체 구조 · 홈 버튼 첫 페이지 ·
+      <a href="README.md">문서 인덱스</a>
+    </p>
+  </div>
+</body>
+</html>

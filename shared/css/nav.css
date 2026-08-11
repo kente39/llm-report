@@ -1,0 +1,139 @@
+/* =========================================================
+   nav.css — 홈 버튼 / 클릭 이동 영역 / 위치 표시기
+   z-index 규칙:  클릭영역(10) < 표시기(20) < 홈버튼(30)
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   클릭 이동 영역
+   좌우: 화면 양옆 세로 띠 / 상하: 가운데 위아래 블록
+   (좌우 영역이 상하 영역보다 우선하도록 겹치지 않게 배치)
+   --------------------------------------------------------- */
+
+.hitzone {
+  position: fixed;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.hitzone--left,
+.hitzone--right {
+  top: 0;
+  width: 22%;
+  height: 100%;
+}
+
+.hitzone--left  { left: 0;  }
+.hitzone--right { right: 0; }
+
+.hitzone--up,
+.hitzone--down {
+  left: 22%;
+  right: 22%;
+  height: 26%;
+}
+
+.hitzone--up   { top: 0;    }
+.hitzone--down { bottom: 0; }
+
+/* ---------------------------------------------------------
+   홈 버튼 (좌상단)
+   클릭영역보다 위에 위치해야 섹션 이동이 발생하지 않음
+   --------------------------------------------------------- */
+
+.home-btn {
+  position: fixed;
+  z-index: 30;
+  top: 24px;
+  left: 24px;
+
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-dim);
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: color .15s ease, border-color .15s ease;
+}
+
+.home-btn:hover {
+  color: var(--fg);
+  border-color: var(--fg-dim);
+}
+
+.home-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------
+   현재 위치 표시기 (우하단)
+   형식: "9 / 12  ·  1 / 1"
+   --------------------------------------------------------- */
+
+.indicator {
+  position: fixed;
+  z-index: 20;
+  right: 24px;
+  bottom: 24px;
+
+  color: var(--fg-dim);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+
+  /* 표시 전용: 클릭은 아래 클릭영역으로 통과 */
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------------------------------------------------------
+   모바일 대응
+   --------------------------------------------------------- */
+
+@media (max-width: 600px) {
+  .home-btn  { top: 16px; left: 16px; }
+  .indicator { right: 16px; bottom: 16px; }
+}
+
+/* ---------------------------------------------------------
+   목록으로 버튼 (좌상단, 홈버튼 오른쪽) — 랜딩 페이지로 복귀
+   --------------------------------------------------------- */
+.to-list-btn {
+  position: fixed;
+  z-index: 30;
+  top: 24px;
+  left: 122px;  /* 홈버튼 오른쪽 */
+
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-dim);
+  text-decoration: none;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  transition: color .15s ease, border-color .15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.to-list-btn:hover {
+  color: var(--fg);
+  border-color: var(--fg-dim);
+}
+.to-list-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .to-list-btn { top: 20px; left: auto; right: 20px; padding: 8px 12px; font-size: 12px; }
+}

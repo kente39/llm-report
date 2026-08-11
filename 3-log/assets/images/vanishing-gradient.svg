@@ -1,0 +1,58 @@
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans KR, sans-serif">
+  <rect width="720" height="300" fill="#14161a"/>
+  <text x="360" y="34" fill="#f2f4f7" font-size="18" font-weight="700" text-anchor="middle">Vanishing Gradient — 반복 곱셈으로 과거가 묻힌다</text>
+
+  <!-- 시점 노드들 -->
+  <!-- 색이 뒤로 갈수록(과거) 흐려짐 -->
+  <g text-anchor="middle" font-size="13">
+    <!-- t1 (먼 과거) -->
+    <circle cx="90"  cy="150" r="30" fill="#2a2e35" stroke="#3a3f48"/>
+    <text x="90"  y="155" fill="#5a616b">t₁</text>
+    <text x="90"  y="205" fill="#5a616b" font-size="11">먼 과거</text>
+
+    <circle cx="230" cy="150" r="30" fill="#2f3946" stroke="#41505f"/>
+    <text x="230" y="155" fill="#7f8b99">t₂</text>
+
+    <circle cx="370" cy="150" r="30" fill="#38495c" stroke="#4a6076"/>
+    <text x="370" y="155" fill="#a9b6c4">t₃</text>
+
+    <circle cx="510" cy="150" r="30" fill="#42607f" stroke="#557a9e"/>
+    <text x="510" y="155" fill="#d3dde7">t₄</text>
+
+    <!-- t5 (최근) -->
+    <circle cx="650" cy="150" r="30" fill="#6ea8fe" stroke="#8fbcff"/>
+    <text x="650" y="155" fill="#0c1220" font-weight="700">t₅</text>
+    <text x="650" y="205" fill="#9cc2ff" font-size="11">최근</text>
+  </g>
+
+  <!-- 화살표 + 곱셈 라벨 -->
+  <g stroke="#4a5058" stroke-width="2" fill="none" marker-end="url(#arr)">
+    <line x1="120" y1="150" x2="200" y2="150"/>
+    <line x1="260" y1="150" x2="340" y2="150"/>
+    <line x1="400" y1="150" x2="480" y2="150"/>
+    <line x1="540" y1="150" x2="620" y2="150"/>
+  </g>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#4a5058"/>
+    </marker>
+  </defs>
+  <g fill="#8b939f" font-size="12" text-anchor="middle">
+    <text x="160" y="138">×0.5</text>
+    <text x="300" y="138">×0.5</text>
+    <text x="440" y="138">×0.5</text>
+    <text x="580" y="138">×0.5</text>
+  </g>
+
+  <!-- 기울기 크기 바 (아래) -->
+  <g text-anchor="middle" font-size="11" fill="#8b939f">
+    <text x="40" y="255" fill="#8b939f">기울기</text>
+    <rect x="78"  y="248" width="24" height="4"  fill="#3a3f48" rx="2"/>
+    <rect x="218" y="246" width="24" height="8"  fill="#41505f" rx="2"/>
+    <rect x="358" y="243" width="24" height="14" fill="#4a6076" rx="2"/>
+    <rect x="498" y="238" width="24" height="24" fill="#557a9e" rx="2"/>
+    <rect x="638" y="230" width="24" height="40" fill="#6ea8fe" rx="2"/>
+  </g>
+
+  <text x="360" y="292" fill="#8b939f" font-size="12" text-anchor="middle">0.5를 거듭 곱할수록 과거(t₁)의 기울기는 거의 0 → 오래된 기억이 사라진다</text>
+</svg>
