@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "노트북 가격 변수 중요도 입력 스키마",
+  "description": "랜덤포레스트 변수 중요도를 LLM 분석에 재사용하기 위한 표준 입력 형식",
+  "type": "object",
+  "properties": {
+    "metric": {
+      "type": "string",
+      "enum": ["MDI", "Permutation"],
+      "description": "중요도 산출 방식"
+    },
+    "ranking": {
+      "type": "array",
+      "description": "순위별 변수 중요도 목록",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rank":    { "type": "integer", "description": "중요도 순위 (1이 가장 높음)" },
+          "feature": { "type": "string",  "description": "변수명 (예: Processor, RAM)" },
+          "score":   { "type": "number",  "description": "중요도 점수 (0~1)" }
+        },
+        "required": ["rank", "feature", "score"]
+      }
+    }
+  },
+  "required": ["metric", "ranking"]
+}

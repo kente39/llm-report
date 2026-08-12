@@ -1,0 +1,11 @@
+rank,metric,feature,score
+1,MDI,Processor,0.244654
+2,MDI,GPU,0.136253
+3,MDI,RAM,0.127873
+4,MDI,Screen_Size,0.094117
+5,MDI,Brand,0.093518
+1,Permutation,Processor,0.177700
+2,Permutation,RAM,0.169367
+3,Permutation,Condition_Very Good - Refurbished,0.106245
+4,Permutation,GPU,0.091927
+5,Permutation,Condition_Good - Refurbished,0.091885
